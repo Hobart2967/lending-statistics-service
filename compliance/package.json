@@ -1,0 +1,23 @@
+{
+  "name": "@wyrekit/development-compliance",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "type": "module",
+	"scripts": {
+		"test": "echo 'no tests'",
+		"test:e2e": "echo 'no tests'",
+		"test:cov": "echo 'no tests'"
+	},
+  "dependencies": {
+    "@eslint/js": "^9.9.1",
+    "@stylistic/eslint-plugin": "^2.7.2",
+    "@stylistic/eslint-plugin-ts": "^2.7.2",
+		"eslint-plugin-import": "^2.31.0",
+    "@typescript-eslint/parser": "^8.4.0",
+    "eslint": "^9.9.1",
+    "globals": "^15.9.0",
+    "typescript": "^5.5.3",
+    "typescript-eslint": "^8.4.0"
+  }
+}

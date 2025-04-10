@@ -1,0 +1,29 @@
+name: Release
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: lts/*
+      - name: Install dependencies
+        run: yarn
+      - name: Build Project
+        run: cd projects/lend-stats-service && yarn test:cov
+      - name: Build Project
+        run: cd projects/lend-stats-service && yarn test:e2e
+      - name: Build Project
+        run: cd projects/lend-stats-service && yarn build
