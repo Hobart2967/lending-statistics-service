@@ -8,21 +8,25 @@ import { environment } from '../environment/environment';
 export function dataSourceFactory(...entities: Array<Function | string | EntitySchema>): Provider<DataSource> {
 	return {
 		provide: DataSource,
-		useFactory: () => new DataSource({
-			type: environment.database.type as DatabaseType,
-			host: environment.database.host,
-			port: environment.database.port,
-			username: environment.database.username,
-			password: environment.database.password,
-			database: environment.database.database,
+		useFactory: async (): Promise<DataSource> => {
+			const dataSource = new DataSource({
+				type: environment.database.type as DatabaseType,
+				host: environment.database.host,
+				port: environment.database.port,
+				username: environment.database.username,
+				password: environment.database.password,
+				database: environment.database.database,
 
-			synchronize: true,
-			logging: true,
+				synchronize: true,
+				logging: true,
 
-			entities,
+				entities,
 
-			subscribers: [],
-			migrations: []
-		} as DataSourceOptions)
+				subscribers: [],
+				migrations: []
+			} as DataSourceOptions);
+
+			return await dataSource.initialize();
+		}
 	};
 }

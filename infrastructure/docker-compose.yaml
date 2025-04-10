@@ -7,3 +7,5 @@ services:
       MYSQL_DATABASE: lending_statistics
       MYSQL_USER: lending
       MYSQL_PASSWORD: 222cf123@b4fb#4c16%9120&ffd11a251308
+    ports:
+      - "4506:3306"

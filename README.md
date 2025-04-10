@@ -18,9 +18,10 @@ It does three main things: Updates the balance for each bank account, figures ou
 
 Required dependencies and tools are:
 
-| Name    | Description      | Source                                                        |
-| ------- | ---------------- | ------------------------------------------------------------- |
-| Node.js | At least v22.5.1 | Node.js official Website, or: [asdf-vm](https://asdf-vm.com/) |
+| Name                    | Description      | Source                                                        |
+| ----------------------- | ---------------- | ------------------------------------------------------------- |
+| Node.js                 | At least v22.5.1 | Node.js official Website, or: [asdf-vm](https://asdf-vm.com/) |
+| Docker & Docker Compose | -                | -                                                             |
 
 ### Clone and setup repository
 
@@ -30,6 +31,9 @@ git clone git@github.com:Hobart2967/scalara-job
 
 # Install required packages and set up project
 yarn
+
+# Boot required docker compose environment, including a database service.
+cd infrastructure && docker-compose up -d
 ```
 
 ### Repository structure
