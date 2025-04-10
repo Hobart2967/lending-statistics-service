@@ -65,7 +65,8 @@ npm run test:e2e
 
 #### Swagger UI
 
-The API automatically exposes an OpenApi Specification. The endpoint listening would be http://localhost:3000
+The API automatically exposes an OpenApi Specification. The endpoint listening would be http://localhost:3000.
+There, you also have the possibility to test the API using a web frontend.
 
 ### CI/CD
 
@@ -78,3 +79,11 @@ act push
 ```
 
 from within the root folder of this repo.
+
+## Common development Tasks
+
+### Adding a new entity
+
+1. Create a new file in the `projects/lend-stats-service/src/entities` folder
+2. Add the entity to the `projects/lend-stats-service/src/app.module` file. Within there, you'll find the `databaseSourceFactory` call, which takes a list of entities to use with TypeORM.
+3. As needed, create a entity-related repository.
