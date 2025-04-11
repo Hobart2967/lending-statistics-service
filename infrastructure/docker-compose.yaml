@@ -19,3 +19,13 @@ services:
       MYSQL_PASSWORD: 222cf123@b4fb#4c16%9120&ffd11a251308
     ports:
       - "4507:3306"
+  redis:
+    container_name: lending_statistics_queues
+    image: redis
+    ports:
+      - 6379:6379
+    volumes:
+      - redis:/data
+
+volumes:
+  redis:
