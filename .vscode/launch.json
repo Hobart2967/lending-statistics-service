@@ -1,0 +1,18 @@
+{
+  "version": "1.0.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Jest: current file",
+      "env": { "stage": "e2e" },
+      "program": "${workspaceFolder}/node_modules/.bin/jest",
+      "args": ["${fileBasenameNoExtension}", "--config", "./test/jest-e2e.json"],
+      "console": "integratedTerminal",
+			"cwd": "${workspaceFolder}/projects/lend-stats-service/",
+      "windows": {
+        "program": "${workspaceFolder}/node_modules/jest/bin/jest"
+      }
+    }
+  ]
+}
