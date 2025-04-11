@@ -27,3 +27,5 @@ jobs:
         run: cd projects/lend-stats-service && yarn test:e2e
       - name: Build Project
         run: cd projects/lend-stats-service && yarn build
+
+      # TODO: Deployment

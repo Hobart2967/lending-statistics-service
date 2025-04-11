@@ -5,14 +5,15 @@
   "main": "index.js",
   "author": "Hobart2967 <hobart2967@outlook.com>",
   "license": "MIT",
-	"scripts": {
-		"run-all": "yarn run wsrun"
-	},
+  "scripts": {
+    "run-all": "yarn run wsrun"
+  },
   "workspaces": [
     "projects/*",
     "compliance"
   ],
   "devDependencies": {
+    "@faker-js/faker": "^9.6.0",
     "wsrun": "^5.2.4"
   }
 }
