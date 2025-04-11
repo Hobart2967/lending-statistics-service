@@ -3,7 +3,9 @@
 import { UpdateStatisticsController } from './update-statistics.controller';
 import { UpdateProcessType } from '../models/update-process-type';
 import { It, Mock } from 'moq.ts';
-import type { QueueService } from '../services/queue.service';
+import type {
+	LendingStatsProcessQueueService
+} from '../queues/lending-stats-process-queue/lending-stats-process-queue.service';
 import type { QueueJobRequest } from '../models/queue-job-request';
 
 describe('AppController', () => {
@@ -11,10 +13,10 @@ describe('AppController', () => {
 	let request: QueueJobRequest | undefined;
 
 	beforeEach(() => {
-		const queueServiceMock = new Mock<QueueService>();
+		const queueServiceMock = new Mock<LendingStatsProcessQueueService>();
 		queueServiceMock
 			.setup(svc => {
-				svc.queueProcess(It.IsAny<QueueJobRequest>() as QueueJobRequest);
+				void svc.queueProcess(It.IsAny<QueueJobRequest>() as QueueJobRequest);
 			})
 			.callback(({ args: [incomingRequest] }) => request = incomingRequest as QueueJobRequest);
 
@@ -23,7 +25,7 @@ describe('AppController', () => {
 
 	describe('root', () => {
 		it('should return "Hello World!"', () => {
-			appController.queueJob({
+			void appController.queueJob({
 				processType: UpdateProcessType.UpdateAccountsFromTransactions
 			});
 

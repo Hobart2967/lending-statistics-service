@@ -1,4 +1,4 @@
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, MoreThanOrEqual, Repository } from 'typeorm';
 import { TransactionEntity } from '../entities/transaction.entity';
 import { DatabaseRepository } from '../services/database-repository.service';
 import { Injectable } from '@nestjs/common';
@@ -30,6 +30,21 @@ export class TransactionRepository extends DatabaseRepository {
 
 	public async clear(): Promise<void> {
 		await this.repository.clear();
+	}
+
+	public async findTransactionsForIbanSince(accountIban: string, date: Date): Promise<TransactionEntity[]> {
+		return await this.repository.find({
+			where: [
+				{
+					fromIban: accountIban,
+					transactionDate: MoreThanOrEqual(date)
+				},
+				{
+					toIban: accountIban,
+					transactionDate: MoreThanOrEqual(date)
+				}
+			]
+		});
 	}
 	// #endregion
 }

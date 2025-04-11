@@ -13,6 +13,8 @@ import { BankAccountRepository } from '../src/repositories/bank-account.reposito
 import type { InterfaceOf } from './utils/interface-of';
 import { TransactionRepository } from '../src/repositories/transaction.repository';
 import { TransactionEntity } from '../src/entities/transaction.entity';
+import { LendingStatsProcessQueueService } from '../src/queues/lending-stats-process-queue/lending-stats-process-queue.service';
+import { QueueJobRequest } from '../src/models/queue-job-request';
 describe('AppController (e2e)', () => {
 	let app: INestApplication<App>;
 	let persons = [] as PersonEntity[];
@@ -161,12 +163,27 @@ describe('AppController (e2e)', () => {
 		}));
 	});
 
-	it('/ (GET)', () => {
-		return request(app.getHttpServer())
+	it('/ (GET)', async () => {
+		const result = await request(app.getHttpServer())
 			.post('/')
 			.send({
 				processType: 1
 			})
 			.expect(201);
+
+		const queue = app.get(LendingStatsProcessQueueService);
+
+		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+		while (true) {
+			const status = await queue.getQueueStatus();
+			if (status.total) {
+				await new Promise(resolve => setTimeout(resolve, 100));
+				continue;
+			}
+
+			break;
+		}
+
+		return result;
 	});
 });
