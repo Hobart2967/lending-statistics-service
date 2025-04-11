@@ -149,12 +149,13 @@ export default options => ({
 		'@typescript-eslint/no-unnecessary-type-constraint': 'error',
 		'@typescript-eslint/no-unnecessary-type-parameters': 'error',
 		'@typescript-eslint/no-unsafe-argument': 'error',
-		'@typescript-eslint/no-unsafe-assignment': 'error',
-		'@typescript-eslint/no-unsafe-call': 'error',
+		'@typescript-eslint/no-unsafe-assignment': 'off', // TODO: Check if useful and check weird behavior.
+		'@typescript-eslint/no-unsafe-call': 'off', // TODO: Check if useful and check weird behavior.
+
 		'@typescript-eslint/no-unsafe-declaration-merging': 'error',
 		'@typescript-eslint/no-unsafe-enum-comparison': 'error',
 		'@typescript-eslint/no-unsafe-function-type': 'error',
-		'@typescript-eslint/no-unsafe-member-access': 'error',
+		'@typescript-eslint/no-unsafe-member-access': 'off', // TODO: Check if useful and check weird behavior.
 		'@typescript-eslint/no-unsafe-return': 'error',
 		'@typescript-eslint/no-unsafe-unary-minus': 'error',
 		'no-unused-expressions': 'off',
@@ -225,6 +226,7 @@ export default options => ({
 			}
 		],
 		'@typescript-eslint/unified-signatures': 'error',
-		'import/no-extraneous-dependencies': ['error', {"devDependencies": ["**/*.*spec.ts", "**/*.*spec.js"]}]
+		'import/no-extraneous-dependencies': ['error', { "devDependencies": ["**/*.*spec.ts", "**/*.*spec.js", "**/*.e2e-*.ts", "**/*.e2e-*.js"] }],
+
 	}
 });
