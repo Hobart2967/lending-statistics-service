@@ -28,6 +28,14 @@ export class BankAccountRepository extends DatabaseRepository {
 		});
 	}
 
+	public async getAll(): Promise<BankAccountEntity[]> {
+		return await this.repository.find();
+	}
+
+	public async update(bankAccount: BankAccountEntity): Promise<BankAccountEntity> {
+		return await this.repository.save(bankAccount);
+	}
+
 	public async clear(): Promise<void> {
 		await this.repository.clear();
 	}

@@ -41,6 +41,14 @@ yarn
 cd infrastructure && docker-compose up -d
 ```
 
+### Useful links
+
+| url                     | description             |
+| ----------------------- | ----------------------- |
+| http://localhost:3000/ | Base Url of the service |
+| http://localhost:3000/ | Swagger documentation   |
+| http://localhost:4508/ | Redis Commander         |
+
 ### Repository structure
 
 | Path             | Description                                                                                                                               |
@@ -81,6 +89,10 @@ You can debug integration tests by jumping into a *.e2e-spec.ts file and hit F5.
 The API automatically exposes an OpenApi Specification. The endpoint listening would be http://localhost:3000.
 There, you also have the possibility to test the API using a web frontend.
 
+#### Redis GUI
+
+Within the docker compose environment, there's also a pre-configured queue administration gui - the Redis commander. It runs at http://localhost:4508/
+
 ### CI/CD
 
 This repository utilizes GitHub Actions as CI/CD Hoster. To run and test workflows locally, we recommand `act` - [see here](https://nektosact.com/introduction.html).
@@ -110,3 +122,22 @@ I quit the research about that problem for time reasons and added it to this lis
 ## Notes
 
 - Since I have never worked with Graph Databases, I chose Maria DB / MySQL for simplicity and implementation speed reasons. This does not mean I'd go for that in a business use case, because it may be worth looking at other solutions as well, as they may suit better.
+- One thing that can be improved for sure is the handling of queues and messages with Redis - My queues knowledge is limited to MSMQ and SQS, so I would see potential in improving here.
+- Testing strategy: I decided to go for mocking instead of booting up the whole container for Unit Tests. This gains build speed and does not loose anything, as I still to integration testing - keeping the whole wiring tested.
+
+## Outlook
+
+Things that at minimum are still open:
+
+- Technical, as well as business documentation is missing. It would help looking at this service in 3 years to get into details when trying to fix or extend this service.
+- Tests are technically not yet covering a satisfying amount of code and use cases. Especially when thinking about "rainy day" cases, there can be more tests. I focused on the main aspects for time reasons.
+- When I would plan to continue the project, I would also ensure to have security implemented. This API is implemented completely publicly visible which is bad for the data we deal with. That includes
+  - Token / Authorization verification
+  - DDoS Protection, etc.
+  - Application Firewall & Intrusion detection.
+- Deployment to a stage is not yet implemented and still needs to be done.
+- Monitoring and Technical Support fragments is missing - e.g. for observing queues, dlq's and exceptions.
+- There is no customer facing application at this time. This project has been implemented solely as backend project, providing APIs.
+- Performance optimizations
+  - Currently, the job gets all bank accounts and processes them one after the other. What could be done instead, is creating a queue entry for each bank account, processing the accounts in parallel.
+  - Database optimizations can be made. I already hinted some indices in the entities, but there could be more optimizations that can be done.
