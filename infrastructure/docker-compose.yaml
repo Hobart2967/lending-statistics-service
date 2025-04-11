@@ -9,3 +9,13 @@ services:
       MYSQL_PASSWORD: 222cf123@b4fb#4c16%9120&ffd11a251308
     ports:
       - "4506:3306"
+  database_e2e:
+    container_name: lending_statistics_db_e2e
+    image: mariadb:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: 18567f16!1cc7@4868#afde+901d71a2399e
+      MYSQL_DATABASE: lending_statistics
+      MYSQL_USER: lending
+      MYSQL_PASSWORD: 222cf123@b4fb#4c16%9120&ffd11a251308
+    ports:
+      - "4507:3306"
