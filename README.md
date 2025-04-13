@@ -187,8 +187,10 @@ Things that at minimum are still open:
 - Monitoring and Technical Support fragments is missing - e.g. for observing queues, dlq's and exceptions.
 - There is no customer facing application at this time. This project has been implemented solely as backend project, providing APIs.
 - Performance optimizations
-  - Currently, the job gets all bank accounts and processes them one after the other. What could be done instead, is creating a queue entry for each bank account, processing the accounts in parallel.
+  - Currently, the update balance job gets all bank accounts and processes them one after the other. What could be done instead, is creating a queue entry for each bank account, processing the accounts in parallel.
   - Database optimizations can be made. I already hinted some indices in the entities, but there could be more optimizations that can be done.
+  - Large lists may require pagination - This is not implemented yet
+  - Splitting up code into separate work loads can be done to improve performance on large data sets
 - Currency Management - Currencies are not covered, this may or may not be the case
 - Ground Zero - The service expects bank accounts to be there and pre-filled with data. It does not cover creating bank acccounts, transactions, etc. This is not prone to errors and needs to be covered.
 - Data Protection topics etc need to be discussed. Who may access which data, etc?
