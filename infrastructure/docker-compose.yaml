@@ -9,6 +9,8 @@ services:
       MYSQL_PASSWORD: 222cf123@b4fb#4c16%9120&ffd11a251308
     ports:
       - "4506:3306"
+    volumes:
+      - local_db:/var/lib/mysql
   database_e2e:
     container_name: lending_statistics_db_e2e
     image: mariadb:latest
@@ -19,6 +21,8 @@ services:
       MYSQL_PASSWORD: 222cf123@b4fb#4c16%9120&ffd11a251308
     ports:
       - "4507:3306"
+    volumes:
+      - e2e_db:/var/lib/mysql
   redis:
     container_name: lending_statistics_queues
     image: redis
@@ -38,4 +42,6 @@ services:
     user: redis
 
 volumes:
+  e2e_db:
+  local_db:
   redis:

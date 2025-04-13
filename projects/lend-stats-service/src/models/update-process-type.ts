@@ -1,5 +1,5 @@
 export enum UpdateProcessType {
 	UpdateAccountsFromTransactions = 1,
-	UpdatePersonWorth = 2,
+	UpdatePersonWealth = 2,
 	UpdateLoanLimit = 3
 }

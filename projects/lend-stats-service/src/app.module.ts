@@ -29,11 +29,17 @@ import {
 import {
 	UpdateUserWorthProcessHandler
 } from './queues/lending-stats-process-queue/process/update-user-worth.process-handler';
+import { PersonWealthInfoEntity } from './entities/person-wealth-info.entity';
+import { PersonLoanLimitEntity } from './entities/person-loan-limit.entity';
+import { PersonLoanLimitRepository } from './repositories/person-loan-limit.repository';
+import { PersonWealthInfoRepository } from './repositories/person-wealth-info.repository';
+import { FriendshipEntity } from './entities/friendship.entity';
 
 @Module({
 	imports: [
 		BullModule.forRoot({
 			connection: {
+				// TODO: Move this to environment
 				host: 'localhost',
 				port: 6379
 			}
@@ -54,6 +60,8 @@ import {
 		PersonRepository,
 		BankAccountRepository,
 		TransactionRepository,
+		PersonLoanLimitRepository,
+		PersonWealthInfoRepository,
 		// #endregion
 
 		ProcessHandlerRegistry,
@@ -76,7 +84,10 @@ import {
 		dataSourceProvider(
 			PersonEntity,
 			BankAccountEntity,
-			TransactionEntity
+			TransactionEntity,
+			PersonWealthInfoEntity,
+			PersonLoanLimitEntity,
+			FriendshipEntity
 		)
 	]
 })

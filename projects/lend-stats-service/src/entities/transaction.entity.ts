@@ -1,5 +1,6 @@
 import { Column, Entity, Index } from 'typeorm';
 import { EntityBase } from './entity-base';
+import { MoneyTransformer } from './converters/money-transformer';
 
 @Entity()
 export class TransactionEntity extends EntityBase {
@@ -9,7 +10,7 @@ export class TransactionEntity extends EntityBase {
 	@Column()
 	@Index('to-iban-idx')
 	public toIban: string;
-	@Column()
+	@Column({ type: 'decimal', precision: 22, scale: 2, transformer: new MoneyTransformer() })
 	public amount: number;
 	@Column()
 	@Index('transaction-date-idx')

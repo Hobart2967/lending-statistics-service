@@ -38,7 +38,7 @@ git clone git@github.com:Hobart2967/scalara-job
 yarn
 
 # Boot required docker compose environment, including a database service.
-cd infrastructure && docker-compose up -d
+cd infrastructure && docker compose up -d
 ```
 
 ### Useful links
@@ -46,7 +46,7 @@ cd infrastructure && docker-compose up -d
 | url                     | description             |
 | ----------------------- | ----------------------- |
 | http://localhost:3000/ | Base Url of the service |
-| http://localhost:3000/ | Swagger documentation   |
+| http://localhost:3000/api | Swagger documentation   |
 | http://localhost:4508/ | Redis Commander         |
 
 ### Repository structure
@@ -59,6 +59,13 @@ cd infrastructure && docker-compose up -d
 | ./projects       | Contains all business logic, tests etc. It's a subdirectory because other parts for this business domain may follow (e.g. a web frontend) |
 
 ### Tooling and Testing
+
+#### Test Docs
+
+These files document the test results and the goal:
+
+- [#1 Update Bank Account Balance](./docs/test/1.update-bank-accounts.md)
+- [#2 Update Person Wealth](./docs/test/2.update-person-wealth.md)
 
 #### Unit Tests
 
@@ -78,6 +85,15 @@ This project uses integration tests. It basically covers calling the APIs from o
 ```sh
 cd projects/lend-stats-service
 npm run test:e2e
+```
+
+##### Resetting integration test environment
+
+Sometimes, it can be helpful to start the (integration test) environment from scratch. To do so, run:
+
+```sh
+(cd infrastructure; docker compose down --volumes)
+(cd infrastructure; docker compose up -d)
 ```
 
 ##### Using VS Code
@@ -118,6 +134,7 @@ from within the root folder of this repo.
 - Project uses faker-js for e2e tests. This is planned, but what was not planned, was to add it to the workspace root. Unfortunately, yarn did neither hoist nor localize the package into any of the node_modules directories from within the `./projects/lend-stats-service` folder and upwards. It was simply not there, while yarn telling `Hey! It's installed`.
 I quit the research about that problem for time reasons and added it to this list.
 - Some ToDos in the Code have been marked with "TODO". Those are steps that I would plan for the future if continuing to develop on this project.
+- Cascading and database layout needs to be improved. E.g. when a friendship is cancelled, there's currently no logic that also cleans up the friends loan limits.
 
 ## Notes
 
@@ -141,3 +158,5 @@ Things that at minimum are still open:
 - Performance optimizations
   - Currently, the job gets all bank accounts and processes them one after the other. What could be done instead, is creating a queue entry for each bank account, processing the accounts in parallel.
   - Database optimizations can be made. I already hinted some indices in the entities, but there could be more optimizations that can be done.
+- Currency Management - Currencies are not covered, this may or may not be the case
+- Ground Zero - The service expects bank accounts to be there and pre-filled with data. It does not cover creating bank acccounts, transactions, etc. This is not prone to errors and needs to be covered.
