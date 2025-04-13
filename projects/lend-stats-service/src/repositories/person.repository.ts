@@ -3,7 +3,6 @@ import { PersonEntity } from '../entities/person.entity';
 import { DatabaseRepository } from '../services/database-repository.service';
 import { Injectable } from '@nestjs/common';
 import { FriendshipEntity } from '../entities/friendship.entity';
-import { r } from '@faker-js/faker/dist/airline-CBNP41sR';
 
 @Injectable()
 export class PersonRepository extends DatabaseRepository {
