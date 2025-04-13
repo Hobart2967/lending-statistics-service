@@ -28,9 +28,9 @@ export class PersonWealthInfoRepository extends DatabaseRepository {
 		await this.repository.insert(wealthInfo);
 	}
 
-	public async delete(wealthInfo: PersonWealthInfoEntity): Promise<void> {
+	public async delete(personId: string): Promise<void> {
 		await this.repository.delete({
-			personId: wealthInfo.personId
+			personId
 		});
 	}
 

@@ -30,9 +30,10 @@ export class PersonLoanLimitRepository extends DatabaseRepository {
 		await this.repository.insert(loanLimit);
 	}
 
-	public async delete(loanLimit: PersonLoanLimitEntity): Promise<void> {
+	public async delete(personId: string, friendId: string): Promise<void> {
 		await this.repository.delete({
-			personId: loanLimit.personId
+			personId,
+			friendId
 		});
 	}
 

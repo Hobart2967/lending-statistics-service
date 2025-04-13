@@ -17,6 +17,9 @@ import {
 	LendingStatsProcessQueueService
 } from '../src/queues/lending-stats-process-queue/lending-stats-process-queue.service';
 import { UpdateProcessType } from '../src/models/update-process-type';
+import { PersonWealthInfoRepository } from '../src/repositories/person-wealth-info.repository';
+import { PersonLoanLimitEntity } from '../src/entities/person-loan-limit.entity';
+import { PersonLoanLimitRepository } from '../src/repositories/person-loan-limit.repository';
 
 describe('AppController (e2e)', () => {
 	let app: INestApplication<App>;
@@ -198,9 +201,24 @@ describe('AppController (e2e)', () => {
 		}));
 
 		const personRepository = app.get(PersonRepository);
-		await Promise.all(persons.map(async person => {
+
+		for (const person of persons) {
+			const wealthInfoRepository = app.get(PersonWealthInfoRepository);
+			await wealthInfoRepository.delete(person.id);
+
+			const friendships = await personRepository.getFriends(person.id);
+
+			for (const friendship of friendships) {
+				const loanLimitRepository = app.get(PersonLoanLimitRepository);
+				await loanLimitRepository.delete(person.id, friendship.personBId);
+				await loanLimitRepository.delete(friendship.personBId, person.id);
+
+				await personRepository.removeFriendship(person.id, friendship.personBId);
+			}
+
+			await wealthInfoRepository.delete(person.id);
 			await personRepository.delete(person);
-		}));
+		}
 	});
 
 	it('/ (GET)', async () => {
