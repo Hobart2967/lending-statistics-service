@@ -43,11 +43,21 @@ cd infrastructure && docker compose up -d
 
 ### Useful links
 
-| url                     | description             |
-| ----------------------- | ----------------------- |
-| http://localhost:3000/ | Base Url of the service |
-| http://localhost:3000/api | Swagger documentation   |
-| http://localhost:4508/ | Redis Commander         |
+| url                            | description                                |
+| ------------------------------ | ------------------------------------------ |
+| http://localhost:3000/         | Base Url of the service                    |
+| http://localhost:3000/api      | Swagger documentation & Testing playground |
+| http://localhost:3000/api-json | Swagger documentation as json              |
+| http://localhost:3000/api-yaml | Swagger documentation as yaml              |
+| http://localhost:4508/         | Redis Commander                            |
+
+### Persons in Database Seed:
+
+| id                                   | created             | updated             | name               | email                          |
+| ------------------------------------ | ------------------- | ------------------- | ------------------ | ------------------------------ |
+| 57e6614e-ef20-4b8b-96c4-183317682047 | 2025-04-14 00:54:36 | 2025-04-14 00:54:36 | Jason Walker       | Rubie.Schumm@yahoo.com         |
+| 1581fb18-a3a3-4b8e-a8f8-4d92a61aa913 | 2025-04-14 00:54:36 | 2025-04-14 00:54:36 | Roland Thompson    | Aurore13@yahoo.com             |
+| 1b7c00d6-9175-4ed6-a284-f964006527aa | 2025-04-14 00:54:36 | 2025-04-14 00:54:36 | Mr. Sidney Keebler | Katrina.Dietrich55@hotmail.com |
 
 ### Repository structure
 
@@ -66,6 +76,25 @@ These files document the test results and the goal:
 
 - [#1 Update Bank Account Balance](./docs/test/1.update-bank-accounts.md)
 - [#2 Update Person Wealth](./docs/test/2.update-person-wealth.md)
+- [#3 Update Loan Limits](./docs/test/3.update-loan-limit.md)
+
+#### Manual Testing
+
+Manual testing is currently possible by using the Swagger UI / OpenAPI Specification mentioned above. To do so, prepare as follows:
+
+1. Start the infrastructure. It brings a pre-seeded database with 3 persons, some bank accounts and some transactions.
+```sh
+cd infrastructure && docker-compose up -d
+```
+
+2. Start the API project
+
+```sh
+cd projects/lend-stats-service && yarn start
+```
+
+3. Open http://localhost:3000/api
+4. Feel free to test!
 
 #### Unit Tests
 
@@ -73,7 +102,7 @@ This project uses unit tests. Run them using
 
 ```sh
 cd projects/lend-stats-service
-npm run test:cov
+yarn test:cov
 ```
 
 You will receive an inline coverage report as well. In addition, the project is fully integrated for running unit tests using Visual Studio Code.
@@ -84,7 +113,7 @@ This project uses integration tests. It basically covers calling the APIs from o
 
 ```sh
 cd projects/lend-stats-service
-npm run test:e2e
+yarn test:e2e
 ```
 
 ##### Resetting integration test environment

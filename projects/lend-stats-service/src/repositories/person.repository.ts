@@ -99,6 +99,15 @@ export class PersonRepository extends DatabaseRepository {
 		});
 	}
 
+	public async getPersonsOfFriendsOf(id: string): Promise<PersonEntity[]> {
+		return (await this.friendshipRepository
+			.createQueryBuilder('friendship')
+			.innerJoin('friendship.personB', 'personB')
+			.where('friendship.personAId = :id', { id })
+			.select('personB.*')
+			.execute()) as PersonEntity[];
+	}
+
 	public async removeFriendship(personAId: string, personBId: string): Promise<void> {
 		await this.dataSource.createEntityManager()
 			.transaction(async entityManager => {

@@ -39,5 +39,13 @@ export class BankAccountRepository extends DatabaseRepository {
 	public async clear(): Promise<void> {
 		await this.repository.clear();
 	}
+
+	public async getByPerson(personId: string): Promise<BankAccountEntity[]> {
+		return await this.repository.find({
+			where: {
+				personId: personId
+			}
+		});
+	}
 	// #endregion
 }

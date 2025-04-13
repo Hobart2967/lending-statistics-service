@@ -4,8 +4,8 @@ import {
 } from '../queues/lending-stats-process-queue/lending-stats-process-queue.service';
 import { QueueJobRequest } from '../models/queue-job-request';
 
-@Controller()
-export class UpdateStatisticsController {
+@Controller('stats')
+export class StatisticsController {
 	// #region Ctor
 	public constructor(private readonly queueService: LendingStatsProcessQueueService) {}
 	// #endregion

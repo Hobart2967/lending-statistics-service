@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/init-declarations */
 
-import { UpdateStatisticsController } from './update-statistics.controller';
+import { StatisticsController } from './update-statistics.controller';
 import { UpdateProcessType } from '../models/update-process-type';
 import { It, Mock } from 'moq.ts';
 import type {
@@ -8,8 +8,8 @@ import type {
 } from '../queues/lending-stats-process-queue/lending-stats-process-queue.service';
 import type { QueueJobRequest } from '../models/queue-job-request';
 
-describe(UpdateStatisticsController.name, () => {
-	let appController!: UpdateStatisticsController;
+describe(StatisticsController.name, () => {
+	let appController!: StatisticsController;
 	let request: QueueJobRequest | undefined;
 
 	beforeEach(() => {
@@ -20,7 +20,7 @@ describe(UpdateStatisticsController.name, () => {
 			})
 			.callback(({ args: [incomingRequest] }) => request = incomingRequest as QueueJobRequest);
 
-		appController = new UpdateStatisticsController(queueServiceMock.object());
+		appController = new StatisticsController(queueServiceMock.object());
 	});
 
 	it('should queue the right job type', () => {

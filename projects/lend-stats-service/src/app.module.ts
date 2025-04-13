@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { UpdateStatisticsController } from './controllers/update-statistics.controller';
+import { StatisticsController } from './controllers/update-statistics.controller';
 import {
 	LendingStatsProcessQueueService
 } from './queues/lending-stats-process-queue/lending-stats-process-queue.service';
@@ -34,6 +34,7 @@ import { PersonLoanLimitEntity } from './entities/person-loan-limit.entity';
 import { PersonLoanLimitRepository } from './repositories/person-loan-limit.repository';
 import { PersonWealthInfoRepository } from './repositories/person-wealth-info.repository';
 import { FriendshipEntity } from './entities/friendship.entity';
+import { PersonController } from './controllers/person.controller';
 
 @Module({
 	imports: [
@@ -51,7 +52,10 @@ import { FriendshipEntity } from './entities/friendship.entity';
 			name: `${LENDING_STATS_PROCESS_QUEUE}-dlq`
 		})
 	],
-	controllers: [UpdateStatisticsController],
+	controllers: [
+		StatisticsController,
+		PersonController
+	],
 	providers: [
 		LendingStatsProcessQueueService,
 		LendingStatsProcessQueueProcessor,
