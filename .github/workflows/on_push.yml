@@ -27,4 +27,4 @@ jobs:
       - name: Build Project
         run: cd projects/lend-stats-service && yarn build
 
-      # TODO: Deployment
+      # TODO: Deployment on main branch
