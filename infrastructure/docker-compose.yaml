@@ -11,6 +11,7 @@ services:
       - "4506:3306"
     volumes:
       - local_db:/var/lib/mysql
+      - ./seed.sql:/docker-entrypoint-initdb.d/seed.sql
   database_e2e:
     container_name: lending_statistics_db_e2e
     image: mariadb:latest
