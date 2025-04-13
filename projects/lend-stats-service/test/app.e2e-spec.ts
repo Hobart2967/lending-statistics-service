@@ -222,7 +222,7 @@ describe('AppController (e2e)', () => {
 
 	it('/ (GET)', async () => {
 		const result = await request(app.getHttpServer())
-			.post('/')
+			.post('/stats')
 			.send({
 				processType: UpdateProcessType.UpdateLoanLimit
 			})
