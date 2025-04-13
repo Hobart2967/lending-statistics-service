@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 // TODO: Define config
 export const environment = {
 	database: {

@@ -1,5 +1,6 @@
 import { Column, Entity } from 'typeorm';
 import { EntityBase } from './entity-base';
+import { FriendshipEntity } from './friendship.entity';
 
 @Entity()
 export class PersonEntity extends EntityBase {
@@ -7,5 +8,5 @@ export class PersonEntity extends EntityBase {
 	public name: string;
 	@Column()
 	public email: string;
-	// TODO: Friends
+	public friends: FriendshipEntity[];
 }

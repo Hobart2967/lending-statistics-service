@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { UpdateStatisticsController } from './controllers/update-statistics.controller';
+import { StatisticsController } from './controllers/update-statistics.controller';
 import {
 	LendingStatsProcessQueueService
 } from './queues/lending-stats-process-queue/lending-stats-process-queue.service';
@@ -27,13 +27,20 @@ import {
 	UpdateLoanLimitsProcessHandler
 } from './queues/lending-stats-process-queue/process/update-loan-limits.process-handler';
 import {
-	UpdateUserWorthProcessHandler
-} from './queues/lending-stats-process-queue/process/update-user-worth.process-handler';
+	UpdateUserWealthProcessHandler
+} from './queues/lending-stats-process-queue/process/update-user-wealth.process-handler';
+import { PersonWealthInfoEntity } from './entities/person-wealth-info.entity';
+import { PersonLoanLimitEntity } from './entities/person-loan-limit.entity';
+import { PersonLoanLimitRepository } from './repositories/person-loan-limit.repository';
+import { PersonWealthInfoRepository } from './repositories/person-wealth-info.repository';
+import { FriendshipEntity } from './entities/friendship.entity';
+import { PersonController } from './controllers/person.controller';
 
 @Module({
 	imports: [
 		BullModule.forRoot({
 			connection: {
+				// TODO: Move this to environment
 				host: 'localhost',
 				port: 6379
 			}
@@ -45,7 +52,10 @@ import {
 			name: `${LENDING_STATS_PROCESS_QUEUE}-dlq`
 		})
 	],
-	controllers: [UpdateStatisticsController],
+	controllers: [
+		StatisticsController,
+		PersonController
+	],
 	providers: [
 		LendingStatsProcessQueueService,
 		LendingStatsProcessQueueProcessor,
@@ -54,12 +64,14 @@ import {
 		PersonRepository,
 		BankAccountRepository,
 		TransactionRepository,
+		PersonLoanLimitRepository,
+		PersonWealthInfoRepository,
 		// #endregion
 
 		ProcessHandlerRegistry,
 		...provideProcessHandler(UpdateAccountBalanceProcessHandler),
 		...provideProcessHandler(UpdateLoanLimitsProcessHandler),
-		...provideProcessHandler(UpdateUserWorthProcessHandler),
+		...provideProcessHandler(UpdateUserWealthProcessHandler),
 
 		{
 			provide: Environment,
@@ -76,7 +88,10 @@ import {
 		dataSourceProvider(
 			PersonEntity,
 			BankAccountEntity,
-			TransactionEntity
+			TransactionEntity,
+			PersonWealthInfoEntity,
+			PersonLoanLimitEntity,
+			FriendshipEntity
 		)
 	]
 })

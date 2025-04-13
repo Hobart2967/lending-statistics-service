@@ -44,15 +44,19 @@ export class UpdateAccountBalanceProcessHandler extends ProcessHandler {
 
 		// TODO: to be able to rollback in case of an error. (if needed/think about it).
 		for (const bankAccount of bankAccounts) {
+			this.log.debug(`Processing account ${bankAccount.id}`);
+
 			const transactions = await this.transactionRepository.findTransactionsForIbanSince(
 				bankAccount.accountIban,
 				bankAccount.balanceUpdatedAt
 			);
+
+			this.log.debug(`Found ${transactions.length} new transactions for account ${bankAccount.id}`);
 			const totalBalance = transactions
 				.map(transaction => transaction.fromIban === bankAccount.accountIban
 					? -transaction.amount
 					: transaction.amount)
-				.reduce((acc, amount) => acc + amount, 0);
+				.reduce((acc, amount) => acc + amount, bankAccount.balance);
 
 			bankAccount.balance = totalBalance;
 			bankAccount.balanceUpdatedAt = new Date();

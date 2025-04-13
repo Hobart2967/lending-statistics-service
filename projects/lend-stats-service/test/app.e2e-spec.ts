@@ -13,8 +13,13 @@ import { BankAccountRepository } from '../src/repositories/bank-account.reposito
 import type { InterfaceOf } from './utils/interface-of';
 import { TransactionRepository } from '../src/repositories/transaction.repository';
 import { TransactionEntity } from '../src/entities/transaction.entity';
-import { LendingStatsProcessQueueService } from '../src/queues/lending-stats-process-queue/lending-stats-process-queue.service';
-import { QueueJobRequest } from '../src/models/queue-job-request';
+import {
+	LendingStatsProcessQueueService
+} from '../src/queues/lending-stats-process-queue/lending-stats-process-queue.service';
+import { UpdateProcessType } from '../src/models/update-process-type';
+import { PersonWealthInfoRepository } from '../src/repositories/person-wealth-info.repository';
+import { PersonLoanLimitRepository } from '../src/repositories/person-loan-limit.repository';
+
 describe('AppController (e2e)', () => {
 	let app: INestApplication<App>;
 	let persons = [] as PersonEntity[];
@@ -35,7 +40,7 @@ describe('AppController (e2e)', () => {
 		const personRepository = app.get(PersonRepository);
 
 		// TODO: Simplify seeding
-		persons = Array.from({ length: 10 }, () => {
+		persons = Array.from({ length: 3 }, () => {
 			const person = new PersonEntity();
 			person.name = faker.person.fullName();
 			person.email = faker.internet.email();
@@ -47,24 +52,48 @@ describe('AppController (e2e)', () => {
 			await personRepository.create(person);
 		}));
 
+		for (const person of persons) {
+			for (const friend of persons.filter(potentialFriend => potentialFriend.id !== person.id)) {
+				await personRepository.addFriendship(person.id, friend.id);
+			}
+		}
+
 		const bankAccountRepository = app.get(BankAccountRepository);
 		const bankAccountInfos = [
 			{
 				personId: persons[0].id,
 				accountIban: faker.finance.iban(),
-				balance: 1032.23,
+				balance: 1000,
 				balanceUpdatedAt: new Date('2023-10-01T00:00:00Z')
 			},
 			{
 				personId: persons[0].id,
 				accountIban: faker.finance.iban(),
-				balance: 1032.23,
+				balance: 50,
 				balanceUpdatedAt: new Date('2023-10-01T00:00:00Z')
 			},
 			{
-				personId: persons[0].id,
+				personId: persons[1].id,
 				accountIban: faker.finance.iban(),
-				balance: 1032.23,
+				balance: 300,
+				balanceUpdatedAt: new Date('2023-10-01T00:00:00Z')
+			},
+			{
+				personId: persons[1].id,
+				accountIban: faker.finance.iban(),
+				balance: 600,
+				balanceUpdatedAt: new Date('2023-10-01T00:00:00Z')
+			},
+			{
+				personId: persons[1].id,
+				accountIban: faker.finance.iban(),
+				balance: 400,
+				balanceUpdatedAt: new Date('2023-10-01T00:00:00Z')
+			},
+			{
+				personId: persons[2].id,
+				accountIban: faker.finance.iban(),
+				balance: 3000,
 				balanceUpdatedAt: new Date('2023-10-01T00:00:00Z')
 			}
 		] as Array<InterfaceOf<BankAccountEntity>>;
@@ -87,31 +116,41 @@ describe('AppController (e2e)', () => {
 		const transactionInfos = [
 			{
 				amount: 9.99,
+				// person 0
 				fromIban: bankAccounts[0].accountIban,
+				// person 0
 				toIban: bankAccounts[1].accountIban,
 				transactionDate: new Date('2023-11-01T00:00:00Z')
 			},
 			{
 				amount: 4.99,
+				// person 0
 				fromIban: bankAccounts[1].accountIban,
+				// person 1
 				toIban: bankAccounts[2].accountIban,
 				transactionDate: new Date('2023-11-01T00:00:00Z')
 			},
 			{
 				amount: 3.89,
+				// person 0
 				fromIban: bankAccounts[1].accountIban,
+				// person 1
 				toIban: bankAccounts[2].accountIban,
 				transactionDate: new Date('2023-11-01T00:00:00Z')
 			},
 			{
 				amount: 50.00,
+				// person 1
 				fromIban: bankAccounts[2].accountIban,
+				// person 0
 				toIban: bankAccounts[1].accountIban,
 				transactionDate: new Date('2023-11-01T00:00:00Z')
 			},
 			{
 				amount: 500.00,
+				// person 0
 				fromIban: bankAccounts[0].accountIban,
+				// person 1
 				toIban: bankAccounts[2].accountIban,
 				transactionDate: new Date('2023-11-01T00:00:00Z')
 			},
@@ -119,11 +158,13 @@ describe('AppController (e2e)', () => {
 			{
 				amount: 500.00,
 				fromIban: 'DE-123456789012345',
+				// person 1
 				toIban: bankAccounts[2].accountIban,
 				transactionDate: new Date('2023-11-01T00:00:00Z')
 			},
 			{
 				amount: 350.00,
+				// person 1
 				fromIban: bankAccounts[2].accountIban,
 				toIban: 'DE-123456789012345',
 				transactionDate: new Date('2023-11-01T00:00:00Z')
@@ -147,10 +188,6 @@ describe('AppController (e2e)', () => {
 
 	afterEach(async () => {
 		// TODO: Simplify
-		const personRepository = app.get(PersonRepository);
-		await Promise.all(persons.map(async person => {
-			await personRepository.delete(person);
-		}));
 
 		const bankAccountRepository = app.get(BankAccountRepository);
 		await Promise.all(bankAccounts.map(async bankAccount => {
@@ -161,13 +198,33 @@ describe('AppController (e2e)', () => {
 		await Promise.all(transactions.map(async transaction => {
 			await transactionRepository.delete(transaction);
 		}));
+
+		const personRepository = app.get(PersonRepository);
+
+		for (const person of persons) {
+			const wealthInfoRepository = app.get(PersonWealthInfoRepository);
+			await wealthInfoRepository.delete(person.id);
+
+			const friendships = await personRepository.getFriends(person.id);
+
+			for (const friendship of friendships) {
+				const loanLimitRepository = app.get(PersonLoanLimitRepository);
+				await loanLimitRepository.delete(person.id, friendship.personBId);
+				await loanLimitRepository.delete(friendship.personBId, person.id);
+
+				await personRepository.removeFriendship(person.id, friendship.personBId);
+			}
+
+			await wealthInfoRepository.delete(person.id);
+			await personRepository.delete(person);
+		}
 	});
 
 	it('/ (GET)', async () => {
 		const result = await request(app.getHttpServer())
-			.post('/')
+			.post('/stats')
 			.send({
-				processType: 1
+				processType: UpdateProcessType.UpdateLoanLimit
 			})
 			.expect(201);
 

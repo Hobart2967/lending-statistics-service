@@ -4,6 +4,7 @@ import { InjectQueue } from '@nestjs/bullmq';
 import { LENDING_STATS_PROCESS_QUEUE } from './lending-stats-process.queue-processor';
 import { Job, Queue, QueueEvents } from 'bullmq';
 import { randomUUID } from 'crypto';
+import { UpdateProcessType } from '../../models/update-process-type';
 
 @Injectable()
 export class LendingStatsProcessQueueService implements OnModuleInit {
@@ -34,9 +35,21 @@ export class LendingStatsProcessQueueService implements OnModuleInit {
 
 	public async queueProcess(queueJobRequest: QueueJobRequest): Promise<void> {
 		this.log.log('Queue Job');
-		await this.processQueue.add(randomUUID(), queueJobRequest, {
-			removeOnComplete: true
-		});
+		const processIds = Object.values(UpdateProcessType)
+			.filter(x => typeof x === 'number');
+
+		const maximumProcessId = processIds
+			.reduce((prev, processId) => Math.max(processId, prev), 1);
+
+		for (let requiredPreceedingJob = 1; requiredPreceedingJob <= maximumProcessId; requiredPreceedingJob++) {
+			this.log.log('Queue Job for processId', requiredPreceedingJob);
+			await this.processQueue.add(randomUUID(), {
+				...queueJobRequest,
+				processType: requiredPreceedingJob as UpdateProcessType
+			} as QueueJobRequest, {
+				removeOnComplete: true
+			});
+		}
 	}
 
 	public async getQueueStatus(): Promise<{
