@@ -27,8 +27,8 @@ import {
 	UpdateLoanLimitsProcessHandler
 } from './queues/lending-stats-process-queue/process/update-loan-limits.process-handler';
 import {
-	UpdateUserWorthProcessHandler
-} from './queues/lending-stats-process-queue/process/update-user-worth.process-handler';
+	UpdateUserWealthProcessHandler
+} from './queues/lending-stats-process-queue/process/update-user-wealth.process-handler';
 import { PersonWealthInfoEntity } from './entities/person-wealth-info.entity';
 import { PersonLoanLimitEntity } from './entities/person-loan-limit.entity';
 import { PersonLoanLimitRepository } from './repositories/person-loan-limit.repository';
@@ -67,7 +67,7 @@ import { FriendshipEntity } from './entities/friendship.entity';
 		ProcessHandlerRegistry,
 		...provideProcessHandler(UpdateAccountBalanceProcessHandler),
 		...provideProcessHandler(UpdateLoanLimitsProcessHandler),
-		...provideProcessHandler(UpdateUserWorthProcessHandler),
+		...provideProcessHandler(UpdateUserWealthProcessHandler),
 
 		{
 			provide: Environment,

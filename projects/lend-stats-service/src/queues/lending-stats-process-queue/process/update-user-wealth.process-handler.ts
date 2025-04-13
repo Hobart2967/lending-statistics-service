@@ -6,9 +6,9 @@ import { PersonWealthInfoRepository } from '../../../repositories/person-wealth-
 import { Injectable, Logger } from '@nestjs/common';
 
 @Injectable()
-export class UpdateUserWorthProcessHandler extends ProcessHandler {
+export class UpdateUserWealthProcessHandler extends ProcessHandler {
 	// #region Private Fields
-	private readonly log: Logger = new Logger(UpdateUserWorthProcessHandler.name);
+	private readonly log: Logger = new Logger(UpdateUserWealthProcessHandler.name);
 	// #endregion
 
 	// #region Public Fields

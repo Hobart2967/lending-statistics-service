@@ -8,7 +8,7 @@ import type {
 } from '../queues/lending-stats-process-queue/lending-stats-process-queue.service';
 import type { QueueJobRequest } from '../models/queue-job-request';
 
-describe('AppController', () => {
+describe(UpdateStatisticsController.name, () => {
 	let appController!: UpdateStatisticsController;
 	let request: QueueJobRequest | undefined;
 
@@ -23,14 +23,21 @@ describe('AppController', () => {
 		appController = new UpdateStatisticsController(queueServiceMock.object());
 	});
 
-	describe('root', () => {
-		it('should return "Hello World!"', () => {
-			void appController.queueJob({
-				processType: UpdateProcessType.UpdateAccountsFromTransactions
-			});
-
-			expect(request?.processType)
-				.toBe(UpdateProcessType.UpdateAccountsFromTransactions);
+	it('should queue the right job type', () => {
+		void appController.queueJob({
+			processType: UpdateProcessType.UpdateAccountsFromTransactions
 		});
+
+		expect(request?.processType)
+			.toBe(UpdateProcessType.UpdateAccountsFromTransactions);
+	});
+
+	it('should queue the right job type - second check', () => {
+		void appController.queueJob({
+			processType: UpdateProcessType.UpdatePersonWealth
+		});
+
+		expect(request?.processType)
+			.toBe(UpdateProcessType.UpdatePersonWealth);
 	});
 });

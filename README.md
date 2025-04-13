@@ -76,7 +76,7 @@ cd projects/lend-stats-service
 npm run test:cov
 ```
 
-You will receive an inline coverage report as well.
+You will receive an inline coverage report as well. In addition, the project is fully integrated for running unit tests using Visual Studio Code.
 
 #### Integration Tests
 
@@ -142,13 +142,14 @@ I quit the research about that problem for time reasons and added it to this lis
 - Since I have never worked with Graph Databases, I chose Maria DB / MySQL for simplicity and implementation speed reasons. This does not mean I'd go for that in a business use case, because it may be worth looking at other solutions as well, as they may suit better.
 - One thing that can be improved for sure is the handling of queues and messages with Redis - My queues knowledge is limited to MSMQ and SQS, so I would see potential in improving here.
 - Testing strategy: I decided to go for mocking instead of booting up the whole container for Unit Tests. This gains build speed and does not loose anything, as I still to integration testing - keeping the whole wiring tested.
+- TypeORM is my all-time bucket-list entry - So I haven't used it yet, so I see way more potential in leveraging its benefits, such as proper usage of the entity reltion properties, which I rarely used in this project. I focused on setting up the database model with it, be able to do queries, but as for time reasons I did not dig deeper, which I would've done in a real situation.
 
 ## Outlook
 
 Things that at minimum are still open:
 
 - Technical, as well as business documentation is missing. It would help looking at this service in 3 years to get into details when trying to fix or extend this service.
-- Tests are technically not yet covering a satisfying amount of code and use cases. Especially when thinking about "rainy day" cases, there can be more tests. I focused on the main aspects for time reasons.
+- Tests are technically not yet covering a satisfying amount of code and use cases. Especially when thinking about "rainy day" cases, there can be more tests. I focused on the main aspects for time reasons. I a real situation I would go for testing even more than I did over here.
 - When I would plan to continue the project, I would also ensure to have security implemented. This API is implemented completely publicly visible which is bad for the data we deal with. That includes
   - Token / Authorization verification
   - DDoS Protection, etc.
@@ -161,3 +162,5 @@ Things that at minimum are still open:
   - Database optimizations can be made. I already hinted some indices in the entities, but there could be more optimizations that can be done.
 - Currency Management - Currencies are not covered, this may or may not be the case
 - Ground Zero - The service expects bank accounts to be there and pre-filled with data. It does not cover creating bank acccounts, transactions, etc. This is not prone to errors and needs to be covered.
+- Data Protection topics etc need to be discussed. Who may access which data, etc?
+- Does this project have the need to analyze historical data?
