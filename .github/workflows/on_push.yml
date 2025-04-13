@@ -1,8 +1,5 @@
 name: Release
-on:
-  push:
-    branches:
-      - main
+on: push
 
 permissions:
   contents: write
@@ -21,6 +18,8 @@ jobs:
           node-version: lts/*
       - name: Install dependencies
         run: yarn
+      - name: Boot up integration test environment
+        run: cd infrastructure && docker compose -f docker-compose.yaml up -d --wait
       - name: Run Unit-Tests
         run: cd projects/lend-stats-service && yarn test:cov
       - name: Run Integration Tests
