@@ -18,7 +18,6 @@ import {
 } from '../src/queues/lending-stats-process-queue/lending-stats-process-queue.service';
 import { UpdateProcessType } from '../src/models/update-process-type';
 import { PersonWealthInfoRepository } from '../src/repositories/person-wealth-info.repository';
-import { PersonLoanLimitEntity } from '../src/entities/person-loan-limit.entity';
 import { PersonLoanLimitRepository } from '../src/repositories/person-loan-limit.repository';
 
 describe('AppController (e2e)', () => {

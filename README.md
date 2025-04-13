@@ -135,6 +135,7 @@ from within the root folder of this repo.
 I quit the research about that problem for time reasons and added it to this list.
 - Some ToDos in the Code have been marked with "TODO". Those are steps that I would plan for the future if continuing to develop on this project.
 - Cascading and database layout needs to be improved. E.g. when a friendship is cancelled, there's currently no logic that also cleans up the friends loan limits.
+- Jest detected an open handle and does not exist when not using `--forceExit` - This needs to be investigated if this is critical and where it is coming from. Potential memory leak!
 
 ## Notes
 
