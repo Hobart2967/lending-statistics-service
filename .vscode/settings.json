@@ -8,5 +8,7 @@
 	},
 	"[handlebars]": {
 		"editor.formatOnSave": false
-	}
+	},
+	"jest.runMode": "on-demand",
+	"jest.rootPath": "${workspaceFolder}/projects/lend-stats-service"
 }
