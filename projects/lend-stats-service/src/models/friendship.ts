@@ -1,6 +1,10 @@
+/* istanbul ignore file */
+import { ApiProperty } from '@nestjs/swagger';
 import type { Person } from './person.model';
 
-export interface Friendship {
-	person: Person;
-	loanLimit: number;
+export class Friendship {
+	@ApiProperty()
+	public person: Person;
+	@ApiProperty()
+	public loanLimit: number;
 }

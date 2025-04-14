@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 import type { Provider } from '@nestjs/common';
 import type { DatabaseType, DataSourceOptions, EntitySchema } from 'typeorm';
 

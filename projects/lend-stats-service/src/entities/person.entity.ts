@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import { Column, Entity } from 'typeorm';
 import { EntityBase } from './entity-base';
 import { FriendshipEntity } from './friendship.entity';

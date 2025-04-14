@@ -60,7 +60,8 @@ export class UpdateLoanLimitsProcessHandler extends ProcessHandler {
 					? friendWealthInfo.totalBalance - personalBalance
 					: 0;
 
-				const existing = await this.personLoanLimitRepository.get(loanLimit.personId, loanLimit.friendId);
+				const existing = await this.personLoanLimitRepository
+					.getByFriendship(loanLimit.personId, loanLimit.friendId);
 
 				this.log.debug(`Updating loan limit of ${loanLimit.limit} for friendId: ${friendId}`);
 				if (existing) {

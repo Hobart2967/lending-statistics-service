@@ -1,7 +1,9 @@
+/* istanbul ignore file */
+
 import { Column, Entity, ManyToOne, RelationId } from 'typeorm';
 import { PersonEntity } from './person.entity';
 import { EntityBase } from './entity-base';
-import { MoneyTransformer } from './converters/money-transformer';
+import { MoneyTransformer } from './transformers/money-transformer';
 
 @Entity()
 // TODO: Get index to fly

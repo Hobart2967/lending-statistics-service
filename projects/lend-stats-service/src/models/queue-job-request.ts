@@ -1,3 +1,4 @@
+/* istanbul ignore */
 import { ApiProperty } from '@nestjs/swagger';
 import type { UpdateProcessType } from './update-process-type';
 

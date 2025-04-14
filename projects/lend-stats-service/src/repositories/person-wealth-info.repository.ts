@@ -1,19 +1,20 @@
 import { Injectable } from '@nestjs/common';
-import { DataSource, FindManyOptions, Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { PersonWealthInfoEntity } from '../entities/person-wealth-info.entity';
-import { DatabaseRepository } from '../services/database-repository.service';
+import { BaseDatabaseRepository } from './base-database.repository';
 import { PersonEntity } from '../entities/person.entity';
+import { BankAccountEntity } from '../entities/bank-account.entity';
 
 @Injectable()
-export class PersonWealthInfoRepository extends DatabaseRepository {
-	private readonly repository: Repository<PersonWealthInfoEntity>;
+export class PersonWealthInfoRepository extends BaseDatabaseRepository<PersonWealthInfoEntity> {
+	// #region Private Fields
 	private readonly personRepository: Repository<PersonEntity>;
+	// #endregion
 
 	// #region Ctor
 	public constructor(dataSource: DataSource) {
-		super(dataSource);
+		super(dataSource, PersonWealthInfoEntity);
 
-		this.repository = this.dataSource.getRepository(PersonWealthInfoEntity);
 		this.personRepository = this.dataSource.getRepository(PersonEntity);
 	}
 	// #endregion
@@ -24,30 +25,10 @@ export class PersonWealthInfoRepository extends DatabaseRepository {
 			.findOne({ where: { personId } });
 	}
 
-	public async create(wealthInfo: PersonWealthInfoEntity): Promise<void> {
-		await this.repository.insert(wealthInfo);
-	}
-
-	public async delete(personId: string): Promise<void> {
+	public async deleteByPersonId(personId: string): Promise<void> {
 		await this.repository.delete({
 			personId
 		});
-	}
-
-	public async findAll(options: FindManyOptions<PersonWealthInfoEntity>): Promise<PersonWealthInfoEntity[]> {
-		return await this.repository.find(options);
-	}
-
-	public async getAll(): Promise<PersonWealthInfoEntity[]> {
-		return await this.repository.find();
-	}
-
-	public async update(wealthInfo: PersonWealthInfoEntity): Promise<PersonWealthInfoEntity> {
-		return await this.repository.save(wealthInfo);
-	}
-
-	public async clear(): Promise<void> {
-		await this.repository.clear();
 	}
 
 	public async calculatePersonWealthInfos(): Promise<PersonWealthInfoEntity[]> {
@@ -57,7 +38,7 @@ export class PersonWealthInfoRepository extends DatabaseRepository {
 				'p.id AS personId',
 				'SUM(ba.balance) AS totalBalance'
 			])
-			.innerJoin('bank_account_entity', 'ba', 'ba.personId = p.id')
+			.innerJoin(BankAccountEntity.entityName, 'ba', 'ba.personId = p.id')
 			.groupBy('p.id')
 			.execute();
 

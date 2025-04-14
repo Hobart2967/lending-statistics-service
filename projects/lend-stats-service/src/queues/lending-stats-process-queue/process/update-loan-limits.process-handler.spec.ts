@@ -65,7 +65,7 @@ describe(UpdateLoanLimitsProcessHandler.name, () => {
 	let createInputs: any[] | null = null;
 	let updateInputs: any[] | null = null;
 	const personLoanLimitRepositoryMock = new Mock<PersonLoanLimitRepository>()
-		.setup(async x => await x.get(It.IsAny<string>() as string, It.IsAny<string>() as string))
+		.setup(async x => await x.getByFriendship(It.IsAny<string>() as string, It.IsAny<string>() as string))
 		.callback(async args => {
 			getInputs = args.args;
 

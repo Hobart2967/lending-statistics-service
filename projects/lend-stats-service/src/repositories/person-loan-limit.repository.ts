@@ -1,22 +1,18 @@
 import { Injectable } from '@nestjs/common';
-import { DataSource, Repository } from 'typeorm';
-import { DatabaseRepository } from '../services/database-repository.service';
+import { DataSource } from 'typeorm';
+import { BaseDatabaseRepository } from './base-database.repository';
 import { PersonLoanLimitEntity } from '../entities/person-loan-limit.entity';
 
 @Injectable()
-export class PersonLoanLimitRepository extends DatabaseRepository {
-	private readonly repository: Repository<PersonLoanLimitEntity>;
-
+export class PersonLoanLimitRepository extends BaseDatabaseRepository<PersonLoanLimitEntity> {
 	// #region Ctor
 	public constructor(dataSource: DataSource) {
-		super(dataSource);
-
-		this.repository = this.dataSource.getRepository(PersonLoanLimitEntity);
+		super(dataSource, PersonLoanLimitEntity);
 	}
 	// #endregion
 
 	// #region Public Methods
-	public async get(personId: string, friendId: string): Promise<PersonLoanLimitEntity | null> {
+	public async getByFriendship(personId: string, friendId: string): Promise<PersonLoanLimitEntity | null> {
 		return await this.repository
 			.findOne({
 				where: {
@@ -26,27 +22,11 @@ export class PersonLoanLimitRepository extends DatabaseRepository {
 			});
 	}
 
-	public async create(loanLimit: PersonLoanLimitEntity): Promise<void> {
-		await this.repository.insert(loanLimit);
-	}
-
-	public async delete(personId: string, friendId: string): Promise<void> {
+	public async deleteByFriendship(personId: string, friendId: string): Promise<void> {
 		await this.repository.delete({
 			personId,
 			friendId
 		});
-	}
-
-	public async getAll(): Promise<PersonLoanLimitEntity[]> {
-		return await this.repository.find();
-	}
-
-	public async update(loanLimit: PersonLoanLimitEntity): Promise<PersonLoanLimitEntity> {
-		return await this.repository.save(loanLimit);
-	}
-
-	public async clear(): Promise<void> {
-		await this.repository.clear();
 	}
 	// #endregion
 }
