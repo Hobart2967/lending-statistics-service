@@ -11,7 +11,7 @@ import {
 import { UpdateProcessType } from '../src/models/update-process-type';
 import { seed } from './seed.e2e-util';
 
-xdescribe('Statistics Update Controller (e2e)', () => {
+describe('Statistics Update Controller (e2e)', () => {
 	const context = {};
 	let app: INestApplication<App>;
 
