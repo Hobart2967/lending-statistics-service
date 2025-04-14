@@ -26,6 +26,8 @@ It does three main things: Updates the balance for each bank account, figures ou
 - [Outlook](#outlook)
 
 
+![./docs/concept.excalidraw.png](./docs/concept.excalidraw.png)
+
 ## Preparation of your workspace
 
 Required dependencies and tools are:
