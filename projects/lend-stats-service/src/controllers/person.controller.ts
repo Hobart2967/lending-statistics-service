@@ -26,7 +26,7 @@ export class PersonController {
 		@Param('personId') personId: string,
 		@Res({ passthrough: true }) res: Response
 	): Promise<Person | null> {
-		const personEntity = await this.personRepository.getPersonById(personId);
+		const personEntity = await this.personRepository.get(personId);
 		if (!personEntity) {
 			res.status(204);
 
@@ -85,7 +85,7 @@ export class PersonController {
 	private async getFriendDetails(friend: PersonEntity, personId: string): Promise<Friendship> {
 		return {
 			person: await this.mapToPerson(friend, true),
-			loanLimit: (await this.personLoanLimitRepository.get(
+			loanLimit: (await this.personLoanLimitRepository.getByFriendship(
 				personId,
 				friend.id
 			))?.limit ?? 0

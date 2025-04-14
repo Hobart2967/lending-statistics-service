@@ -1,6 +1,6 @@
-import { Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, ObjectLiteral, PrimaryGeneratedColumn } from 'typeorm';
 
-export class EntityBase {
+export class EntityBase implements ObjectLiteral {
 	@PrimaryGeneratedColumn('uuid')
 	public id: string;
 	@Column()

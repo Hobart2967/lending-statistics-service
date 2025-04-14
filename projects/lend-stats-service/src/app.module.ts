@@ -1,7 +1,10 @@
+/* istanbul ignore file */
+
 import { Module } from '@nestjs/common';
 import { StatisticsController } from './controllers/update-statistics.controller';
 import {
-	LendingStatsProcessQueueService
+	LendingStatsProcessQueueService,
+	LendingStatsQueueEvents
 } from './queues/lending-stats-process-queue/lending-stats-process-queue.service';
 import { dataSourceFactory as dataSourceProvider } from './services/data-source.factory';
 import { PersonEntity } from './entities/person.entity';
@@ -35,6 +38,7 @@ import { PersonLoanLimitRepository } from './repositories/person-loan-limit.repo
 import { PersonWealthInfoRepository } from './repositories/person-wealth-info.repository';
 import { FriendshipEntity } from './entities/friendship.entity';
 import { PersonController } from './controllers/person.controller';
+import { QueueEvents } from 'bullmq';
 
 @Module({
 	imports: [
@@ -84,6 +88,10 @@ import { PersonController } from './controllers/person.controller';
 
 				return new Environment(environment as EnvironmentInstance);
 			}
+		},
+		{
+			provide: LendingStatsQueueEvents,
+			useValue: new QueueEvents(LENDING_STATS_PROCESS_QUEUE)
 		},
 		dataSourceProvider(
 			PersonEntity,

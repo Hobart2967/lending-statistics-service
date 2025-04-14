@@ -1,39 +1,25 @@
 import { DataSource, Repository } from 'typeorm';
 import { PersonEntity } from '../entities/person.entity';
-import { DatabaseRepository } from '../services/database-repository.service';
+import { BaseDatabaseRepository } from './base-database.repository';
 import { Injectable } from '@nestjs/common';
 import { FriendshipEntity } from '../entities/friendship.entity';
+import { InterfaceOf } from '../../test/utils/interface-of';
 
 @Injectable()
-export class PersonRepository extends DatabaseRepository {
+export class PersonRepository extends BaseDatabaseRepository<PersonEntity> {
 	// #region Private Fields
-	private readonly repository: Repository<PersonEntity>;
 	private readonly friendshipRepository: Repository<FriendshipEntity>;
 	// #endregion
 
 	// #region Ctor
 	public constructor(dataSource: DataSource) {
-		super(dataSource);
+		super(dataSource, PersonEntity);
 
-		this.repository = this.dataSource.getRepository(PersonEntity);
 		this.friendshipRepository = this.dataSource.getRepository(FriendshipEntity);
 	}
 	// #endregion
 
 	// #region Public Methods
-	public async getPersonById(personId: string): Promise<PersonEntity | null> {
-		return await this.repository
-			.findOne({ where: { id: personId } });
-	}
-
-	public async create(person: PersonEntity): Promise<void> {
-		await this.repository.insert(person);
-	}
-
-	public async clear(): Promise<void> {
-		await this.repository.clear();
-	}
-
 	public async delete(person: PersonEntity): Promise<void> {
 		const friends = await this.getFriends(person.id);
 
@@ -41,13 +27,7 @@ export class PersonRepository extends DatabaseRepository {
 			await this.removeFriendship(person.id, friendship.personBId);
 		}
 
-		await this.repository.delete({
-			id: person.id
-		});
-	}
-
-	public async getAll(): Promise<PersonEntity[]> {
-		return await this.repository.find();
+		await super.delete(person);
 	}
 
 	public async addFriendship(personAId: string, personBId: string): Promise<void> {
@@ -59,23 +39,32 @@ export class PersonRepository extends DatabaseRepository {
 			.transaction(async entityManager => {
 				const friendshipRepository = entityManager.getRepository(FriendshipEntity);
 
-				let friendship = new FriendshipEntity();
-				friendship.personAId = personAId;
-				friendship.personBId = personBId;
+				const relations = [
+					[
+						personAId,
+						personBId
+					],
+					[
+						personBId,
+						personAId
+					]
+				];
 
-				await friendshipRepository.upsert(friendship, [
-					'personAId',
-					'personBId'
-				]);
+				for (const relation of relations) {
+					const [
+						a,
+						b
+					] = relation;
 
-				friendship = new FriendshipEntity();
-				friendship.personAId = personBId;
-				friendship.personBId = personAId;
+					const friendship = new FriendshipEntity();
+					friendship.personAId = a;
+					friendship.personBId = b;
 
-				await friendshipRepository.upsert(friendship, [
-					'personAId',
-					'personBId'
-				]);
+					await friendshipRepository.upsert(friendship, [
+						'personAId',
+						'personBId'
+					]);
+				}
 			});
 	}
 
@@ -99,7 +88,7 @@ export class PersonRepository extends DatabaseRepository {
 		});
 	}
 
-	public async getPersonsOfFriendsOf(id: string): Promise<PersonEntity[]> {
+	public async getPersonsOfFriendsOf(id: string): Promise<Array<InterfaceOf<PersonEntity>>> {
 		return (await this.friendshipRepository
 			.createQueryBuilder('friendship')
 			.innerJoin('friendship.personB', 'personB')

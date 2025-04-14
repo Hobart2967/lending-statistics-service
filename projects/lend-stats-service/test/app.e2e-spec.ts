@@ -203,19 +203,19 @@ describe('AppController (e2e)', () => {
 
 		for (const person of persons) {
 			const wealthInfoRepository = app.get(PersonWealthInfoRepository);
-			await wealthInfoRepository.delete(person.id);
+			await wealthInfoRepository.deleteByPersonId(person.id);
 
 			const friendships = await personRepository.getFriends(person.id);
 
 			for (const friendship of friendships) {
 				const loanLimitRepository = app.get(PersonLoanLimitRepository);
-				await loanLimitRepository.delete(person.id, friendship.personBId);
-				await loanLimitRepository.delete(friendship.personBId, person.id);
+				await loanLimitRepository.deleteByFriendship(person.id, friendship.personBId);
+				await loanLimitRepository.deleteByFriendship(friendship.personBId, person.id);
 
 				await personRepository.removeFriendship(person.id, friendship.personBId);
 			}
 
-			await wealthInfoRepository.delete(person.id);
+			await wealthInfoRepository.deleteByPersonId(person.id);
 			await personRepository.delete(person);
 		}
 	});

@@ -1,6 +1,7 @@
+/* istanbul ignore file */
 import { Column, Entity, Index } from 'typeorm';
 import { EntityBase } from './entity-base';
-import { MoneyTransformer } from './converters/money-transformer';
+import { MoneyTransformer } from './transformers/money-transformer';
 
 @Entity()
 export class TransactionEntity extends EntityBase {

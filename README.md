@@ -172,12 +172,20 @@ I quit the research about that problem for time reasons and added it to this lis
 - One thing that can be improved for sure is the handling of queues and messages with Redis - My queues knowledge is limited to MSMQ and SQS, so I would see potential in improving here.
 - Testing strategy: I decided to go for mocking instead of booting up the whole container for Unit Tests. This gains build speed and does not loose anything, as I still to integration testing - keeping the whole wiring tested.
 - TypeORM is my all-time bucket-list entry - So I haven't used it yet, so I see way more potential in leveraging its benefits, such as proper usage of the entity reltion properties, which I rarely used in this project. I focused on setting up the database model with it, be able to do queries, but as for time reasons I did not dig deeper, which I would've done in a real situation.
+- I decided to put the module file, most of the entities, the environments to istanbul ignore because of the following reasons:
+  - Models should (generally) be dumb and dont do anything.
+  - Models are (usually) of configurative nature, which either gets tested by other tests, or cannot be tested via unit tests (as they require integration, if you see units strict).
+  - environments are integrative configuration (environment/stage), so have nothing to do with solely units.
+  - environments are integrative configuration (nestjs), so have nothing to do with solely units. Testing nestjs is generally not our job, that's why we use a third party framework (to not do the job).
+  - Same goes for the main.ts and the DataSourceFactory
+- I did not unit test the person controller, because it's tested via manual testing / integration tests already. Though I would be willing to do it if there's more time to do so.
 
 ## Outlook
 
 Things that at minimum are still open:
 
 - Technical, as well as business documentation is missing. It would help looking at this service in 3 years to get into details when trying to fix or extend this service.
+- To make the service more robust, validation can be implemented.
 - Tests are technically not yet covering a satisfying amount of code and use cases. Especially when thinking about "rainy day" cases, there can be more tests. I focused on the main aspects for time reasons. I a real situation I would go for testing even more than I did over here.
 - When I would plan to continue the project, I would also ensure to have security implemented. This API is implemented completely publicly visible which is bad for the data we deal with. That includes
   - Token / Authorization verification

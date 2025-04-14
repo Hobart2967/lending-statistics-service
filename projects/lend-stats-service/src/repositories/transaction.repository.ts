@@ -1,37 +1,17 @@
-import { DataSource, MoreThanOrEqual, Repository } from 'typeorm';
+import { DataSource, MoreThanOrEqual } from 'typeorm';
 import { TransactionEntity } from '../entities/transaction.entity';
-import { DatabaseRepository } from '../services/database-repository.service';
+import { BaseDatabaseRepository } from './base-database.repository';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class TransactionRepository extends DatabaseRepository {
-	// #region Private Fields
-	private readonly repository: Repository<TransactionEntity>;
-	// #endregion
-
+export class TransactionRepository extends BaseDatabaseRepository<TransactionEntity> {
 	// #region Ctor
 	public constructor(dataSource: DataSource) {
-		super(dataSource);
-
-		this.repository = this.dataSource.getRepository(TransactionEntity);
+		super(dataSource, TransactionEntity);
 	}
 	// #endregion
 
 	// #region Public Methods
-	public async create(transaction: TransactionEntity): Promise<void> {
-		await this.repository.insert(transaction);
-	}
-
-	public async delete(transaction: TransactionEntity): Promise<void> {
-		await this.repository.delete({
-			id: transaction.id
-		});
-	}
-
-	public async clear(): Promise<void> {
-		await this.repository.clear();
-	}
-
 	public async findTransactionsForIbanSince(accountIban: string, date: Date): Promise<TransactionEntity[]> {
 		return await this.repository.find({
 			where: [

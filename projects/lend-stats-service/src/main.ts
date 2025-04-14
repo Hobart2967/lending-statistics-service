@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import 'reflect-metadata';
 
 import { NestFactory } from '@nestjs/core';
