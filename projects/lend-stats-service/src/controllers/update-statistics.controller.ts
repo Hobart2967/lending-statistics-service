@@ -15,6 +15,10 @@ export class StatisticsController {
 	@HttpCode(HttpStatus.CREATED)
 	// TODO: Security
 	public async queueJob(@Body() queueJobRequest: QueueJobRequest): Promise<void> {
+		if (queueJobRequest.processType as number < 1 || queueJobRequest.processType as number > 3) {
+			throw Error('Invalid process type');
+		}
+
 		await this.queueService.queueProcess(queueJobRequest);
 	}
 	// #endregion

@@ -96,6 +96,8 @@ cd projects/lend-stats-service && yarn start
 3. Open http://localhost:3000/api
 4. Feel free to test!
 
+The stats POST call is to trigger the update processes, use values 1 - 3 for testing the different process ids.
+
 #### Unit Tests
 
 This project uses unit tests. Run them using
@@ -160,7 +162,6 @@ from within the root folder of this repo.
 
 ## ⚠️⚠️ ToDos and Tech Debt
 
-- Project uses faker-js for e2e tests. This is planned, but what was not planned, was to add it to the workspace root. Unfortunately, yarn did neither hoist nor localize the package into any of the node_modules directories from within the `./projects/lend-stats-service` folder and upwards. It was simply not there, while yarn telling `Hey! It's installed`.
 I quit the research about that problem for time reasons and added it to this list.
 - Some ToDos in the Code have been marked with "TODO". Those are steps that I would plan for the future if continuing to develop on this project.
 - Cascading and database layout needs to be improved. E.g. when a friendship is cancelled, there's currently no logic that also cleans up the friends loan limits.
