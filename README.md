@@ -5,20 +5,28 @@ A backend app that handles users' banking data and runs a few different calculat
 It does three main things: Updates the balance for each bank account, figures out how much each person is worth overall, and calculates the most they could borrow from their friends.
 
 - [Preparation of your workspace](#preparation-of-your-workspace)
-- [Clone and setup repository](#clone-and-setup-repository)
-- [Repository structure](#repository-structure)
-- [Tooling and Testing](#tooling-and-testing)
-	- [Unit Tests](#unit-tests)
-	- [Integration Tests](#integration-tests)
-	- [Swagger UI](#swagger-ui)
-- [CI/CD](#cicd)
-
+	- [Clone and setup repository](#clone-and-setup-repository)
+	- [Useful links](#useful-links)
+	- [Persons in Database Seed:](#persons-in-database-seed)
+	- [Repository structure](#repository-structure)
+	- [Tooling and Testing](#tooling-and-testing)
+		- [Test Docs](#test-docs)
+		- [Manual Testing](#manual-testing)
+		- [Unit Tests](#unit-tests)
+		- [Integration Tests](#integration-tests)
+			- [Resetting integration test environment](#resetting-integration-test-environment)
+			- [Using VS Code](#using-vs-code)
+		- [Swagger UI](#swagger-ui)
+		- [Redis GUI](#redis-gui)
+	- [CI/CD](#cicd)
+- [Common development Tasks](#common-development-tasks)
+	- [Adding a new entity](#adding-a-new-entity)
 - [⚠️⚠️ ToDos and Tech Debt](#️️-todos-and-tech-debt)
-- [Notes](#️️notes)
+- [Notes](#notes)
+- [Outlook](#outlook)
 
-![./docs/concept.excalidraw.png](./docs/concept.excalidraw.png)
 
-### Preparation of your workspace
+## Preparation of your workspace
 
 Required dependencies and tools are:
 
