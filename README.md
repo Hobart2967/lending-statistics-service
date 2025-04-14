@@ -1,4 +1,4 @@
-# Scalara Interview Code Challenge
+# lending-statistics-service
 
 A backend app that handles users' banking data and runs a few different calculations.
 
@@ -31,7 +31,7 @@ Required dependencies and tools are:
 
 ```sh
 # Clone Repo
-git clone git@github.com:Hobart2967/scalara-job
+git clone git@github.com:Hobart2967/lending-statistics-service
 
 # Install required packages and set up project
 yarn
